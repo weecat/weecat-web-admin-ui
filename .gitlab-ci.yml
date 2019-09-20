@@ -1,0 +1,35 @@
+stages:
+- package
+
+variables:
+  APP: weecat-web-admin-ui
+
+build-node:dev:
+  stage: package
+  image: registry.baota.io/node:9.4.0
+  before_script:
+  - yarn config set cache-folder .yarn
+  - yarn config set registry https://nexus3.baota.io/repository/npm-group/ -g
+  - yarn config set sass_binary_site https://nexus3.baota.io/repository/mirrors/node-sass/ -g
+  - yarn config set fse_binary_host_mirror https://nexus3.baota.io/repository/mirrors/fsevents -g
+  script:
+  - yarn install --no-lockfile
+  - yarn build
+  only:
+  - develop
+
+
+build-node:prod:
+  stage: package
+  image: registry.baota.io/node:9.4.0
+  before_script:
+  - yarn config set cache-folder .yarn
+  - yarn config set registry https://nexus3.baota.io/repository/npm-group/ -g
+  - yarn config set sass_binary_site https://nexus3.baota.io/repository/mirrors/node-sass/ -g
+  - yarn config set fse_binary_host_mirror https://nexus3.baota.io/repository/mirrors/fsevents -g
+  script:
+  - yarn install --no-lockfile
+  - yarn build
+  only:
+  - master
+  when: manual
